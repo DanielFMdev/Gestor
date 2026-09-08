@@ -1,2 +1,1 @@
-# GestorAhorro
 # GestorDeAhorro
