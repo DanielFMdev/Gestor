@@ -48,6 +48,16 @@ class _GestorScreenState extends State<GestorScreen> {
     _cargarMovimientos();
   }
 
+  void _eliminarMovimiento(String concepto) {
+
+    setState(() {
+      if (concepto.isNotEmpty) {
+        movimientos.removeWhere((m) => m.concepto == concepto);
+      }
+    });
+
+  }
+
   void _agregarMovimiento(String concepto, double cantidad, bool esIngreso) {
    
     setState(() {
@@ -55,6 +65,7 @@ class _GestorScreenState extends State<GestorScreen> {
         movimientos.add(Movimiento(concepto: concepto, cantidad: cantidad, esIngreso: esIngreso));
       }
     });
+
   }
 
   double get saldoTotal {
@@ -84,6 +95,7 @@ class _GestorScreenState extends State<GestorScreen> {
         centerTitle: true,
         title: Text("Gestor Ahorro"),
       ),
+
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
           showDialog (
@@ -155,11 +167,13 @@ class _GestorScreenState extends State<GestorScreen> {
                   ),
                 ],
               );
-            }
+            },
           );
         },
+
         icon: Icon(Icons.add),
-      ), 
+
+      ),
         
       body: Column(
         children: [
@@ -182,10 +196,52 @@ class _GestorScreenState extends State<GestorScreen> {
                     color: movimiento.esIngreso ? Colors.green : Colors.red
                   ),
                 );
-              }
+              },
             ),
           ),
-        ]
+
+          Padding(
+            padding: EdgeInsetsGeometry.symmetric(vertical: 25),
+            child: IconButton(
+              onPressed: () {
+
+                showDialog(
+                  context: context, 
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Eliminar concepto"),
+                      content: CustomTextField(
+                        controller: _controllerConcepto,
+                        label: InputDecoration(label: Text("Concepto a eliminar")),
+                      ),
+
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _eliminarMovimiento(_controllerConcepto.text);
+                              _guardarMovimientos();
+                              
+                              _controllerConcepto.clear();
+
+                              Navigator.pop(context);
+                            });
+                          }, 
+
+                          child: Text("Eliminar")
+
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+
+              icon: Icon(Icons.delete, color: Colors.red),
+
+            ),
+          ),
+        ],
       ),
     );
   }
