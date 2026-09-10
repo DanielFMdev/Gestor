@@ -135,13 +135,13 @@ class _GestorScreenState extends State<GestorScreen> {
                       TextButton(
                         onPressed: () {
                           setState(() {
-                            final String concepto = _controllerConcepto.text;
-                            final double cantidad = double.tryParse(_controllerCantidad.text) ?? 0.0;
+                            final String concepto = _controllerConcepto.text.trim().toUpperCase();
+                            final double cantidad = double.tryParse(_controllerCantidad.text.trim()) ?? 0.0;
                             final esIngreso = _controllerEsIngreso.text.trim().toLowerCase() == "true";
 
                             _agregarMovimiento(concepto, cantidad, esIngreso);
                             _guardarMovimientos();
-                                  
+                            
                             _controllerConcepto.clear();
                             _controllerCantidad.clear();
                             _controllerEsIngreso.clear();
@@ -189,8 +189,14 @@ class _GestorScreenState extends State<GestorScreen> {
               itemBuilder: (context, index) {
                 final movimiento = movimientos[index];
                 return ListTile(
-                  title: Text(movimiento.concepto),
-                  trailing: Text("${movimiento.cantidad.toStringAsFixed(2)} €"),
+                  title: Text(
+                    movimiento.concepto, 
+                    style: TextStyle(fontWeight: FontWeight.w500)
+                  ),
+                  trailing: Text(
+                    "${movimiento.cantidad.toStringAsFixed(2)} €", 
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)
+                  ),
                   leading: Icon(
                     movimiento.esIngreso ? Icons.expand_less : Icons.expand_more,
                     color: movimiento.esIngreso ? Colors.green : Colors.red
@@ -219,7 +225,7 @@ class _GestorScreenState extends State<GestorScreen> {
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              _eliminarMovimiento(_controllerConcepto.text);
+                              _eliminarMovimiento(_controllerConcepto.text.trim().toUpperCase());
                               _guardarMovimientos();
                               
                               _controllerConcepto.clear();
